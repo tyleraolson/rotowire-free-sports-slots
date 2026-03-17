@@ -71,6 +71,8 @@ body { background:var(--black); font-family:'Barlow',sans-serif; color:var(--whi
 .paytable-btn { background:transparent; border:1px solid var(--purple); color:var(--purple); font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:13px; letter-spacing:1px; padding:8px; border-radius:4px; cursor:pointer; transition:all .2s; text-transform:uppercase; width:100%; }
 .paytable-btn:hover { background:var(--purple); color:#fff; }
 
+.season-select { display:none; background:var(--panel); border:1px solid var(--purple); color:#fff; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:13px; padding:6px 10px; border-radius:4px; cursor:pointer; }
+
 /* MAIN SLOTS */
 .slots-main { flex:1; display:flex; flex-direction:column; align-items:center; padding:20px 16px; background:radial-gradient(ellipse at center top,rgba(160,32,254,.07) 0%,transparent 55%); }
 .season-bar { width:100%; max-width:660px; background:var(--panel); border:1px solid var(--border); border-radius:8px 8px 0 0; padding:9px 18px; display:flex; align-items:center; justify-content:space-between; }
@@ -221,16 +223,18 @@ body { background:var(--black); font-family:'Barlow',sans-serif; color:var(--whi
   /* Machine full width */
   .machine { max-width:100%; padding:10px 8px; }
 
-  /* Reels — scale to fit screen */
-  .reels-row { gap:4px; }
-  .reel { width:calc((100vw - 80px) / 5); height:calc(((100vw - 80px) / 5) * 2.67); }
-  .cell { width:calc((100vw - 80px) / 5); height:calc(((100vw - 80px) / 5) * 0.89); }
-  .cell-emoji { font-size:22px; }
-  .cell-label { font-size:8px; letter-spacing:0.5px; }
-  .cell-odds { font-size:9px; }
-  .payline { height:calc(((100vw - 80px) / 5) * 0.89); }
+  /* Reels — fixed cell size so JS animation aligns correctly */
+  .reels-row { gap:3px; }
+  .reel { width:calc((100vw - 70px) / 5); height:192px; }
+  .cell { width:calc((100vw - 70px) / 5); height:64px; }
+  .cell-emoji { font-size:20px; }
+  .cell-label { font-size:7px; letter-spacing:0.5px; }
+  .cell-odds { font-size:8px; }
+  .payline { height:64px; }
 
-  /* Controls */
+  /* Season dropdown replaces buttons */
+  .season-btns { display:none; }
+  .season-select { display:block; }
   .controls { max-width:100%; padding:10px 8px; gap:7px; }
   .spin-btn { font-size:16px; letter-spacing:2px; padding:12px; }
   .auto-btn { font-size:11px; padding:12px 10px; }
@@ -354,6 +358,12 @@ body { background:var(--black); font-family:'Barlow',sans-serif; color:var(--whi
       <button class="sbtn" onclick="setSeason('mlb')">MLB</button>
       <button class="sbtn" onclick="setSeason('nhl')">NHL</button>
     </div>
+    <select class="season-select" onchange="setSeason(this.value)" style="display:none">
+      <option value="nfl">🏈 NFL</option>
+      <option value="nba">🏀 NBA</option>
+      <option value="mlb">⚾ MLB</option>
+      <option value="nhl">🏒 NHL</option>
+    </select>
   </div>
   <div class="ticker"><div class="ticker-inner" id="tickerInner"></div></div>
 </div>
@@ -683,7 +693,9 @@ let gtdHistArr = [];
 
 // ── REEL ENGINE ─────────────────────────────────────────────────────────
 const NUM_REELS = 5;
-const CELL_H = 96; // must match CSS .cell height
+function getCellH() {
+  return window.innerWidth <= 768 ? 64 : 96;
+}
 const STRIP_REPS = 8; // enough copies to always have motion
 
 let strips = []; // logical symbol arrays per reel
@@ -744,7 +756,7 @@ function initReels() {
     stripEls.push(stripDiv);
 
     // Position so copy #1 middle is visible (show cells 0,1,2 of copy 1)
-    const startY = logical.length * CELL_H; // top of copy #1
+    const startY = logical.length * getCellH(); // top of copy #1
     reelYPos[r] = startY;
     stripDiv.style.transform = `translateY(-${startY}px)`;
   }
@@ -759,16 +771,16 @@ function spinReel(reelIdx, targetIdx, duration) {
     const stripEl = stripEls[reelIdx];
 
     // Always snap back to copy #1 before animating — keeps Y in a known low range
-    const snapY = len * CELL_H; // top of copy #1
+    const snapY = len * getCellH(); // top of copy #1
     stripEl.style.transform = `translateY(-${snapY}px)`;
     reelYPos[reelIdx] = snapY;
 
     // Land in copy #3 or #4 — guarantees 2+ full loops of visible motion
-    const minTravel = len * CELL_H * 2.5;
-    const targetCellY = targetIdx * CELL_H;
-    let C = Math.ceil((snapY + minTravel - targetCellY) / (len * CELL_H));
+    const minTravel = len * getCellH() * 2.5;
+    const targetCellY = targetIdx * getCellH();
+    let C = Math.ceil((snapY + minTravel - targetCellY) / (len * getCellH()));
     if (C < 3) C = 3;
-    const landY = C * len * CELL_H + targetCellY;
+    const landY = C * len * getCellH() + targetCellY;
 
     const startY = snapY;
     const dist = landY - startY;
@@ -786,7 +798,7 @@ function spinReel(reelIdx, targetIdx, duration) {
       } else {
         reelYPos[reelIdx] = landY;
         // Snap back to equivalent position in copy #1 so next spin has runway
-        const normY = (landY % (len * CELL_H)) + len * CELL_H;
+        const normY = (landY % (len * getCellH())) + len * getCellH();
         reelYPos[reelIdx] = normY;
         stripEl.style.transform = `translateY(-${normY}px)`;
         resolve();
@@ -812,9 +824,9 @@ function getVisibleSymbols(reelIdx, targetIdx) {
 function getCenterCell(reelIdx, targetIdx) {
   const logical = strips[reelIdx];
   const len = logical.length;
-  // After normalization, reelYPos is in range [len*CELL_H, 2*len*CELL_H)
+  // After normalization, reelYPos is in range [len*getCellH(), 2*len*getCellH())
   // which corresponds to copy #1. So C=1 always after normalization.
-  const C = Math.round(reelYPos[reelIdx] / (len * CELL_H));
+  const C = Math.round(reelYPos[reelIdx] / (len * getCellH()));
   const cellIndex = C * len + targetIdx;
   return stripEls[reelIdx].children[cellIndex] || null;
 }
@@ -1173,7 +1185,7 @@ function initResponsive() {
   });
 }
 
-window.addEventListener('resize', initResponsive);
+window.addEventListener('resize', () => { initResponsive(); initReels(); });
 
 // ── PAYTABLE ──────────────────────────────────────────────────────────────
 function openPaytable() {
@@ -1195,6 +1207,8 @@ function openPaytable() {
 function setSeason(s) {
   season = s;
   document.querySelectorAll('.sbtn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === s));
+  const sel = document.querySelector('.season-select');
+  if (sel) sel.value = s;
   document.getElementById('seasonIcon').textContent = SEASONS[s].icon;
   document.getElementById('seasonName').textContent = SEASONS[s].name;
   document.getElementById('seasonProg').textContent = SEASONS[s].prog;
