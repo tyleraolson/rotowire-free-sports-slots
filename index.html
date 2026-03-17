@@ -47,16 +47,6 @@ body { background:var(--black); font-family:'Barlow',sans-serif; color:var(--whi
 .t-sep { color:rgba(255,255,255,.4); margin:0 6px; }
 @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-/* ODDS BAR */
-.odds-bar { background:var(--panel); border-bottom:1px solid var(--border); padding:7px 20px; display:flex; gap:10px; align-items:center; overflow-x:auto; }
-.odds-lbl { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:2px; color:var(--gray); text-transform:uppercase; white-space:nowrap; flex-shrink:0; }
-.odds-item { display:flex; flex-direction:column; align-items:center; gap:1px; padding:4px 10px; background:var(--dark); border:1px solid var(--border); border-radius:4px; flex-shrink:0; min-width:76px; transition:border-color .3s; }
-.odds-item.up { border-color:var(--green); }
-.odds-item.dn { border-color:var(--red); }
-.odds-matchup { font-family:'Barlow Condensed',sans-serif; font-size:10px; color:var(--gray); }
-.odds-line { font-family:'Oswald',sans-serif; font-weight:600; font-size:15px; color:var(--gold); }
-.odds-type { font-family:'Barlow Condensed',sans-serif; font-size:10px; color:var(--gray); text-transform:uppercase; }
-
 /* LAYOUT */
 .game-wrap { display:flex; min-height:calc(100vh - 140px); }
 
@@ -208,6 +198,78 @@ body { background:var(--black); font-family:'Barlow',sans-serif; color:var(--whi
 .modal { position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:500; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .3s; }
 .modal.show { opacity:1; pointer-events:all; }
 .modal-box { background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:24px; width:90%; max-width:480px; max-height:80vh; overflow-y:auto; }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  /* Header */
+  .hdr-top { padding:8px 12px; gap:8px; }
+  .hdr-title h1 { font-size:18px; letter-spacing:2px; }
+  .hdr-title p { display:none; }
+  .sbtn { padding:5px 8px; font-size:11px; }
+
+  /* Hide side panels from normal flow */
+  .left-panel, .right-panel { display:none; }
+
+  /* Game wrap stacks vertically */
+  .game-wrap { flex-direction:column; min-height:unset; }
+
+  /* Slots main full width */
+  .slots-main { padding:10px 8px; }
+  .season-bar { max-width:100%; padding:7px 12px; }
+  .season-bar-prog { display:none; }
+
+  /* Machine full width */
+  .machine { max-width:100%; padding:10px 8px; }
+
+  /* Reels — scale to fit screen */
+  .reels-row { gap:4px; }
+  .reel { width:calc((100vw - 80px) / 5); height:calc(((100vw - 80px) / 5) * 2.67); }
+  .cell { width:calc((100vw - 80px) / 5); height:calc(((100vw - 80px) / 5) * 0.89); }
+  .cell-emoji { font-size:22px; }
+  .cell-label { font-size:8px; letter-spacing:0.5px; }
+  .cell-odds { font-size:9px; }
+  .payline { height:calc(((100vw - 80px) / 5) * 0.89); }
+
+  /* Controls */
+  .controls { max-width:100%; padding:10px 8px; gap:7px; }
+  .spin-btn { font-size:16px; letter-spacing:2px; padding:12px; }
+  .auto-btn { font-size:11px; padding:12px 10px; }
+
+  /* Last 5 */
+  .last5 { max-width:100%; }
+  .last5-lbl { font-size:10px; }
+
+  /* Mobile tab bar */
+  .mobile-tabs { display:flex; border-bottom:1px solid var(--border); background:var(--panel); width:100%; }
+  .mobile-tab { flex:1; padding:10px; text-align:center; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:12px; letter-spacing:1.5px; color:var(--gray); text-transform:uppercase; cursor:pointer; border-bottom:2px solid transparent; transition:all .2s; }
+  .mobile-tab.active { color:#fff; border-bottom-color:var(--purple); }
+
+  /* Mobile panel content */
+  .mobile-panel-content { display:none; padding:14px 12px; background:var(--panel); border-bottom:1px solid var(--border); }
+  .mobile-panel-content.active { display:block; }
+
+  /* Inside mobile panels — horizontal layouts */
+  .mobile-stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+  .mobile-stat-box { background:var(--dark); border:1px solid var(--border); border-radius:5px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center; }
+  .mobile-bet-row { display:flex; gap:6px; margin-bottom:10px; }
+  .mobile-bet-row .bet-btn { flex:1; padding:9px 4px; font-size:13px; }
+  .mobile-gtd-row { display:flex; gap:8px; align-items:flex-start; }
+  .mobile-gtd-card { flex:1; }
+  .mobile-gtd-hist { flex:1; display:flex; flex-direction:column; gap:4px; }
+
+  /* Win pop smaller on mobile */
+  .win-pop { padding:12px 20px; }
+  .win-pop-amt { font-size:32px; }
+
+  /* Draft panel tighter */
+  .draft-panel { padding:16px 12px; }
+  .draft-title { font-size:24px; }
+  .draft-board { gap:7px; }
+  .player-card { min-height:100px; padding:10px 7px; }
+  .card-q { font-size:26px; }
+  .card-name { font-size:14px; }
+  .card-mult { font-size:22px; }
+}
 .modal-title { font-family:'Oswald',sans-serif; font-weight:700; font-size:22px; letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--border); }
 .pt-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.05); }
 .pt-syms { font-size:18px; min-width:80px; }
@@ -296,7 +358,6 @@ body { background:var(--black); font-family:'Barlow',sans-serif; color:var(--whi
   <div class="ticker"><div class="ticker-inner" id="tickerInner"></div></div>
 </div>
 
-<div class="odds-bar" id="oddsBar"><div class="odds-lbl">Live Lines</div></div>
 
 <div class="game-wrap">
 
@@ -394,6 +455,64 @@ body { background:var(--black); font-family:'Barlow',sans-serif; color:var(--whi
     </div>
   </div>
 
+</div>
+
+<!-- MOBILE TABS (shown via JS on small screens) -->
+<div class="mobile-tabs" id="mobileTabs" style="display:none">
+  <div class="mobile-tab active" onclick="setMobileTab('wager')">Wager</div>
+  <div class="mobile-tab" onclick="setMobileTab('stats')">Stats</div>
+  <div class="mobile-tab" onclick="setMobileTab('gtd')">GTD Watch</div>
+</div>
+
+<div class="mobile-panel-content active" id="mobileWager" style="display:none">
+  <div style="font-family:'Barlow Condensed';font-size:11px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--border)">Bankroll</div>
+  <div class="balance-box" style="margin-bottom:10px">
+    <div class="balance-lbl">Balance</div>
+    <div class="balance-val" id="mBalanceVal">$1,000</div>
+  </div>
+  <div style="font-family:'Barlow Condensed';font-size:11px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--border)">Wager</div>
+  <div class="mobile-bet-row">
+    <button class="bet-btn active" data-mbet="1" onclick="setBet(1)">$1</button>
+    <button class="bet-btn" data-mbet="5" onclick="setBet(5)">$5</button>
+    <button class="bet-btn" data-mbet="10" onclick="setBet(10)">$10</button>
+    <button class="bet-btn" data-mbet="25" onclick="setBet(25)">$25</button>
+    <button class="bet-btn" data-mbet="50" onclick="setBet(50)">$50</button>
+  </div>
+  <div class="disclaimer" style="margin-top:0">
+    <strong>For Fun Only</strong>
+    <p>No real money wagered. Virtual credits only.</p>
+  </div>
+</div>
+
+<div class="mobile-panel-content" id="mobileStats" style="display:none">
+  <div class="mobile-stats-grid">
+    <div class="mobile-stat-box"><span class="stat-lbl">Spins</span><span class="stat-val" id="mSSpins">0</span></div>
+    <div class="mobile-stat-box"><span class="stat-lbl">Wins</span><span class="stat-val" id="mSWins">0</span></div>
+    <div class="mobile-stat-box"><span class="stat-lbl">Best Win</span><span class="stat-val" id="mSBest">$0</span></div>
+    <div class="mobile-stat-box"><span class="stat-lbl">Net P&L</span><span class="stat-val" id="mSPL">$0</span></div>
+  </div>
+  <button class="paytable-btn" onclick="openPaytable()">📋 Paytable</button>
+</div>
+
+<div class="mobile-panel-content" id="mobileGtd" style="display:none">
+  <div class="mobile-gtd-row">
+    <div class="mobile-gtd-card">
+      <div class="gtd-card">
+        <div class="gtd-badge-tag">⚠ GTD</div>
+        <span class="gtd-sym" id="mGtdSym">🏈</span>
+        <div class="gtd-sym-name" id="mGtdSymName">TD Symbol</div>
+        <div class="gtd-sym-desc">May bust &amp; re-spin (~35%)</div>
+      </div>
+      <div class="gtd-stats" style="margin-top:6px">
+        <div class="gtd-stat"><div class="gtd-stat-num g" id="mGtdHeld">0</div><div class="gtd-stat-lbl">Held</div></div>
+        <div class="gtd-stat"><div class="gtd-stat-num r" id="mGtdBust">0</div><div class="gtd-stat-lbl">Bust</div></div>
+        <div class="gtd-stat"><div class="gtd-stat-num y" id="mGtdSeen">0</div><div class="gtd-stat-lbl">Seen</div></div>
+      </div>
+    </div>
+    <div class="mobile-gtd-hist" id="mGtdHistEl">
+      <div style="font-family:'Barlow Condensed';font-size:12px;color:var(--gray);padding:3px 0">No appearances yet</div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -638,21 +757,20 @@ function spinReel(reelIdx, targetIdx, duration) {
     const logical = strips[reelIdx];
     const len = logical.length;
     const stripEl = stripEls[reelIdx];
-    const currentY = reelYPos[reelIdx];
 
-    // We want targetIdx cell centred in the 3-row window.
-    // "centred" means the strip is offset so that cell targetIdx
-    // in some copy is at y = CELL_H (one cell from the top of the reel window).
-    // Pick a copy far enough ahead that we guarantee >2 full revolutions.
-    const minTravel = len * CELL_H * 2.5; // at least 2.5 loops
-    const targetCellY = targetIdx * CELL_H; // position within one copy
+    // Always snap back to copy #1 before animating — keeps Y in a known low range
+    const snapY = len * CELL_H; // top of copy #1
+    stripEl.style.transform = `translateY(-${snapY}px)`;
+    reelYPos[reelIdx] = snapY;
 
-    // Find lowest copy number C such that (C * len * CELL_H + targetCellY) > currentY + minTravel
-    let C = Math.ceil((currentY + minTravel - targetCellY) / (len * CELL_H));
-    if (C < 1) C = 1;
+    // Land in copy #3 or #4 — guarantees 2+ full loops of visible motion
+    const minTravel = len * CELL_H * 2.5;
+    const targetCellY = targetIdx * CELL_H;
+    let C = Math.ceil((snapY + minTravel - targetCellY) / (len * CELL_H));
+    if (C < 3) C = 3;
     const landY = C * len * CELL_H + targetCellY;
 
-    const startY = currentY;
+    const startY = snapY;
     const dist = landY - startY;
     const startTime = performance.now();
 
@@ -667,6 +785,10 @@ function spinReel(reelIdx, targetIdx, duration) {
         requestAnimationFrame(tick);
       } else {
         reelYPos[reelIdx] = landY;
+        // Snap back to equivalent position in copy #1 so next spin has runway
+        const normY = (landY % (len * CELL_H)) + len * CELL_H;
+        reelYPos[reelIdx] = normY;
+        stripEl.style.transform = `translateY(-${normY}px)`;
         resolve();
       }
     }
@@ -686,15 +808,14 @@ function getVisibleSymbols(reelIdx, targetIdx) {
   return result; // [top, middle, bottom]
 }
 
-// Get the center DOM cell element for a reel (after spin has landed)
+// Get the center DOM cell element for a reel after landing
 function getCenterCell(reelIdx, targetIdx) {
   const logical = strips[reelIdx];
   const len = logical.length;
-  const landY = reelYPos[reelIdx];
-  // Which copy did we land in?
-  // landY = C * len * CELL_H + targetIdx * CELL_H
-  const C = Math.round((landY - targetIdx * CELL_H) / (len * CELL_H));
-  const cellIndex = C * len + targetIdx; // absolute cell index in the DOM strip
+  // After normalization, reelYPos is in range [len*CELL_H, 2*len*CELL_H)
+  // which corresponds to copy #1. So C=1 always after normalization.
+  const C = Math.round(reelYPos[reelIdx] / (len * CELL_H));
+  const cellIndex = C * len + targetIdx;
   return stripEls[reelIdx].children[cellIndex] || null;
 }
 
@@ -851,20 +972,24 @@ async function runGTDSequence(gtdReels, mid) {
 function addGTDHistory(reelIdx, busted) {
   gtdHistArr.unshift({ reel: reelIdx + 1, busted });
   if (gtdHistArr.length > 5) gtdHistArr.pop();
-  const el = document.getElementById('gtdHistEl');
-  el.innerHTML = '';
-  gtdHistArr.forEach(h => {
-    const d = document.createElement('div');
-    d.className = 'gtd-hist-item';
-    d.innerHTML = `<span class="gtd-hist-label">Reel ${h.reel}</span><span class="${h.busted ? 'gtd-bust' : 'gtd-held'}">${h.busted ? '❌ OUT' : '✅ HELD'}</span>`;
-    el.appendChild(d);
+  ['gtdHistEl', 'mGtdHistEl'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '';
+    gtdHistArr.forEach(h => {
+      const d = document.createElement('div');
+      d.className = 'gtd-hist-item';
+      d.innerHTML = `<span class="gtd-hist-label">Reel ${h.reel}</span><span class="${h.busted ? 'gtd-bust' : 'gtd-held'}">${h.busted ? '❌ OUT' : '✅ HELD'}</span>`;
+      el.appendChild(d);
+    });
   });
 }
 
 function updateGTDUI() {
-  document.getElementById('gtdHeld').textContent = gtdHeldN;
-  document.getElementById('gtdBust').textContent = gtdBustN;
-  document.getElementById('gtdSeen').textContent = gtdSeenN;
+  ['gtdHeld','gtdBust','gtdSeen','mGtdHeld','mGtdBust','mGtdSeen'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = [gtdHeldN, gtdBustN, gtdSeenN, gtdHeldN, gtdBustN, gtdSeenN][i];
+  });
 }
 
 // ── DRAFT BONUS ─────────────────────────────────────────────────────────
@@ -967,19 +1092,33 @@ function recordSpin(amt) {
 }
 
 function updateUI() {
-  document.getElementById('balanceVal').textContent = `$${balance.toLocaleString()}`;
+  const bal = `$${balance.toLocaleString()}`;
+  document.getElementById('balanceVal').textContent = bal;
+  if (document.getElementById('mBalanceVal')) document.getElementById('mBalanceVal').textContent = bal;
   document.getElementById('sSpins').textContent = spins;
   document.getElementById('sWins').textContent = wins;
   document.getElementById('sBest').textContent = `$${bestWin}`;
   const plEl = document.getElementById('sPL');
   plEl.textContent = `${netPL >= 0 ? '+' : ''}$${netPL}`;
   plEl.className = 'stat-val ' + (netPL >= 0 ? 'pos' : 'neg');
+  // mobile stats
+  if (document.getElementById('mSSpins')) {
+    document.getElementById('mSSpins').textContent = spins;
+    document.getElementById('mSWins').textContent = wins;
+    document.getElementById('mSBest').textContent = `$${bestWin}`;
+    const mpl = document.getElementById('mSPL');
+    mpl.textContent = `${netPL >= 0 ? '+' : ''}$${netPL}`;
+    mpl.className = 'stat-val ' + (netPL >= 0 ? 'pos' : 'neg');
+  }
   document.getElementById('freeSpinsVal').textContent = freeSpins;
 }
 
 function setBet(v) {
   bet = v;
-  document.querySelectorAll('.bet-btn').forEach(b => b.classList.toggle('active', +b.dataset.bet === v));
+  document.querySelectorAll('.bet-btn').forEach(b => {
+    const val = +(b.dataset.bet || b.dataset.mbet);
+    b.classList.toggle('active', val === v);
+  });
 }
 
 function toggleAuto() {
@@ -996,52 +1135,45 @@ function buildTicker() {
   document.getElementById('tickerInner').innerHTML = html + html;
 }
 
-// ── ODDS BOARD ────────────────────────────────────────────────────────────
-function buildOdds() {
-  const bar = document.getElementById('oddsBar');
-  bar.querySelectorAll('.odds-item').forEach(el => el.remove());
-  oddsData = [...SEASONS[season].odds];
-  oddsData.forEach((o, i) => {
-    bar.innerHTML += `<div class="odds-item" id="odds${i}"><div class="odds-matchup">${o.m}</div><div class="odds-line">${o.l}</div><div class="odds-type">${o.t}</div></div>`;
-  });
-}
-
-function tickOdds() {
-  const i = Math.floor(Math.random() * oddsData.length);
-  const el = document.getElementById('odds' + i);
-  if (!el) return;
-  const cur = oddsData[i].l;
-  const num = parseFloat(cur.replace(/[^0-9.\-]/g, ''));
-  if (isNaN(num)) return;
-  const dir = Math.random() > .5 ? 1 : -1;
-  const delta = +(Math.random() * 1.5 + .5).toFixed(1);
-  const isO = cur.startsWith('O');
-  const newNum = +(num + dir * delta).toFixed(1);
-  oddsData[i].l = isO ? `O ${newNum}` : newNum > 0 ? `+${newNum}` : `${newNum}`;
-  el.querySelector('.odds-line').textContent = oddsData[i].l;
-  el.classList.remove('up', 'dn');
-  el.classList.add(dir > 0 ? 'up' : 'dn');
-  setTimeout(() => el.classList.remove('up', 'dn'), 700);
-}
-
-// ── SYMBOL LEGEND ─────────────────────────────────────────────────────────
 function buildLegend() {
   const el = document.getElementById('symLegend');
-  el.innerHTML = '';
-  SEASONS[season].symbols.forEach(s => {
-    el.innerHTML += `<div class="sym-row"><span style="font-size:16px">${s.e}</span><span style="font-family:'Barlow Condensed';font-size:11px;color:var(--gray)">${s.l}</span></div>`;
-  });
+  if (el) { el.innerHTML = ''; SEASONS[season].symbols.forEach(s => { el.innerHTML += `<div class="sym-row"><span style="font-size:16px">${s.e}</span><span style="font-family:'Barlow Condensed';font-size:11px;color:var(--gray)">${s.l}</span></div>`; }); }
 }
 
 // ── GTD WATCH INIT ────────────────────────────────────────────────────────
 function initGTDWatch() {
   const sym = SEASONS[season].symbols[SEASONS[season].gtdSymIdx];
-  document.getElementById('gtdSym').textContent = sym.e;
-  document.getElementById('gtdSymName').textContent = sym.l + ' Symbol';
+  ['gtdSym','mGtdSym'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = sym.e; });
+  ['gtdSymName','mGtdSymName'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = sym.l + ' Symbol'; });
   gtdHeldN = 0; gtdBustN = 0; gtdSeenN = 0; gtdHistArr = [];
   updateGTDUI();
-  document.getElementById('gtdHistEl').innerHTML = '<div style="font-family:\'Barlow Condensed\';font-size:12px;color:var(--gray);padding:3px 0">No appearances yet</div>';
+  ['gtdHistEl','mGtdHistEl'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = '<div style="font-family:\'Barlow Condensed\';font-size:12px;color:var(--gray);padding:3px 0">No appearances yet</div>';
+  });
 }
+
+// ── MOBILE TABS ──────────────────────────────────────────────────────────
+function setMobileTab(tab) {
+  ['wager','stats','gtd'].forEach(t => {
+    const content = document.getElementById('mobile' + t.charAt(0).toUpperCase() + t.slice(1));
+    const tabEl = document.querySelector(`[onclick="setMobileTab('${t}')"]`);
+    if (content) content.style.display = t === tab ? 'block' : 'none';
+    if (tabEl) tabEl.classList.toggle('active', t === tab);
+  });
+}
+
+function initResponsive() {
+  const isMobile = window.innerWidth <= 768;
+  const tabs = document.getElementById('mobileTabs');
+  tabs.style.display = isMobile ? 'flex' : 'none';
+  ['mobileWager','mobileStats','mobileGtd'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = isMobile && id === 'mobileWager' ? 'block' : 'none';
+  });
+}
+
+window.addEventListener('resize', initResponsive);
 
 // ── PAYTABLE ──────────────────────────────────────────────────────────────
 function openPaytable() {
@@ -1067,7 +1199,6 @@ function setSeason(s) {
   document.getElementById('seasonName').textContent = SEASONS[s].name;
   document.getElementById('seasonProg').textContent = SEASONS[s].prog;
   buildTicker();
-  buildOdds();
   buildLegend();
   initGTDWatch();
   initReels();
@@ -1078,12 +1209,11 @@ document.getElementById('paytableModal').addEventListener('click', e => { if (e.
 
 // ── INIT ──────────────────────────────────────────────────────────────────
 buildTicker();
-buildOdds();
 buildLegend();
 initGTDWatch();
 initReels();
 updateUI();
-setInterval(tickOdds, 3200);
+initResponsive();
 </script>
 </body>
 </html>
